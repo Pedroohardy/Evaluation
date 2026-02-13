@@ -1,4 +1,9 @@
-from ui import afficher_menu, demander_choix_menu
+from ui import (
+    afficher_menu,
+    demander_choix_menu,
+    afficher_clients,
+    afficher_vehicules,
+)
 
 
 def main() -> None:
@@ -6,11 +11,18 @@ def main() -> None:
         afficher_menu()
         choix = demander_choix_menu()
 
-        if choix == "7":
+        if choix == "1":
+            afficher_clients()
+
+        elif choix == "2":
+            afficher_vehicules()
+
+        elif choix == "7":
             print("Au revoir !")
             break
+
         else:
-            print("Option non implémentée pour le moment.")
+            print("Option non implémentée.")
             input("Appuyez sur Entrée pour revenir au menu...")
 
 
