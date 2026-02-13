@@ -4,7 +4,10 @@ from ui import (
     afficher_clients,
     afficher_vehicules,
     demander_reservation,
+    afficher_reservations,
+    afficher_reservations_client,
 )
+from data_manager import charger_reservations
 from models import Reservation
 
 
@@ -21,6 +24,13 @@ def main() -> None:
 
         elif choix == "3":
             demander_reservation()
+
+        elif choix == "5":
+            reservations = charger_reservations()
+            afficher_reservations(reservations)
+
+        elif choix == "6":
+            afficher_reservations_client()
 
         elif choix == "7":
             print("Au revoir !")

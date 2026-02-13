@@ -6,6 +6,8 @@ from data_manager import (
 )
 from models import TarifsManager, Reservation
 
+from data_manager import charger_reservations, filtrer_reservations_par_client
+
 def afficher_menu() -> None:
     print("=" * 60)
     print("SYSTÈME DE LOCATION DE VÉHICULES")
@@ -141,4 +143,42 @@ def demander_reservation() -> None:
     else:
         print("Réservation annulée.")
 
+    input("Appuyez sur Entrée pour revenir au menu...")
+
+
+
+def afficher_reservations(reservations) -> None:
+    print("=" * 60)
+    print("LISTE DES RÉSERVATIONS")
+    print("=" * 60)
+
+    if not reservations:
+        print("Aucune réservation.")
+    else:
+        for r in reservations:
+            print(r)
+
+    print("=" * 60)
+    input("Appuyez sur Entrée pour revenir au menu...")
+
+
+def demander_id_client() -> str:
+    return input("ID du client à rechercher : ").strip()
+
+
+def afficher_reservations_client() -> None:
+    id_client = demander_id_client()
+    reservations = filtrer_reservations_par_client(id_client)
+
+    print("=" * 60)
+    print(f"RÉSERVATIONS DU CLIENT {id_client}")
+    print("=" * 60)
+
+    if not reservations:
+        print("Aucune réservation pour ce client.")
+    else:
+        for r in reservations:
+            print(r)
+
+    print("=" * 60)
     input("Appuyez sur Entrée pour revenir au menu...")
