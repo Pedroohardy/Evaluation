@@ -3,21 +3,42 @@ from models import Client, Vehicule, Reservation
 
 
 def charger_clients():
-    with open("clients.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open("clients.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("❌ Fichier clients.json introuvable.")
+        return []
+    except json.JSONDecodeError:
+        print("❌ Erreur de lecture du fichier clients.json.")
+        return []
 
     return [Client.from_dict(client) for client in data]
 
 
 def charger_vehicules():
-    with open("vehicules.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open("vehicules.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("❌ Fichier vehicules.json introuvable.")
+        return []
+    except json.JSONDecodeError:
+        print("❌ Erreur de lecture du fichier vehicules.json.")
+        return []
 
     return [Vehicule.from_dict(vehicule) for vehicule in data]
 
 def charger_reservations():
-    with open("reservations.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open("reservations.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("⚠️ Fichier reservations.json introuvable. Création d'un nouveau fichier.")
+        return []
+    except json.JSONDecodeError:
+        print("❌ Erreur de lecture du fichier reservations.json.")
+        return []
 
     reservations = []
     for r in data:

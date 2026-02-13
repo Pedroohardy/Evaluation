@@ -1,3 +1,8 @@
+import os
+
+def nettoyer_terminal() -> None:
+    os.system("cls" if os.name == "nt" else "clear")
+
 from data_manager import (
     charger_clients,
     charger_vehicules,
@@ -7,6 +12,7 @@ from data_manager import (
 from models import TarifsManager, Reservation
 
 from data_manager import charger_reservations, filtrer_reservations_par_client
+
 
 def afficher_menu() -> None:
     print("=" * 60)
