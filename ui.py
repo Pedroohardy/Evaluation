@@ -3,6 +3,9 @@ import os
 def nettoyer_terminal() -> None:
     os.system("cls" if os.name == "nt" else "clear")
 
+from datetime import datetime
+
+
 from data_manager import (
     charger_clients,
     charger_vehicules,
@@ -73,6 +76,21 @@ def afficher_recapitulatif(reservation: Reservation) -> None:
     print("=" * 60)
 
 
+def _pause():
+    input("Appuyez sur Entrée pour revenir au menu...")
+
+
+def _date_valide(date_str: str) -> bool:
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
+
+def _forfait_valide(val: str) -> bool:
+    return val in {"100", "200", "300", "+300"}
+
 def demander_reservation() -> None:
     print("=" * 60)
     print("CRÉER UNE NOUVELLE RÉSERVATION")
@@ -87,46 +105,63 @@ def demander_reservation() -> None:
 
     id_client = input("ID du client : ").strip()
 
+    client_sel = next((c for c in clients if c.id_client == id_client), None)
+    if client_sel is None:
+        print("❌ Client inexistant.")
+        _pause()
+        return
+
     print("Véhicules disponibles :")
     for v in vehicules:
         print(f"- {v}")
 
     id_vehicule = input("ID du véhicule : ").strip()
 
+    vehicule_sel = next((v for v in vehicules if v.id_vehicule == id_vehicule), None)
+    if vehicule_sel is None:
+        print("❌ Véhicule inexistant.")
+        _pause()
+        return
+
     date_depart = input("Date de départ (AAAA-MM-JJ) : ").strip()
+    if not _date_valide(date_depart):
+        print("❌ Format de date invalide.")
+        _pause()
+        return
+
     date_retour = input("Date de retour (AAAA-MM-JJ) : ").strip()
+    if not _date_valide(date_retour):
+        print("❌ Format de date invalide.")
+        _pause()
+        return
+
+    d1 = datetime.strptime(date_depart, "%Y-%m-%d").date()
+    d2 = datetime.strptime(date_retour, "%Y-%m-%d").date()
+
+    if d2 <= d1:
+        print("❌ La date de retour doit être après la date de départ.")
+        _pause()
+        return
 
     print("Forfaits disponibles : 100, 200, 300, +300")
     forfait_saisie = input("Forfait kilométrique : ").strip()
 
-    if forfait_saisie == "+300":
-        forfait = "+300"
-    else:
-        forfait = int(forfait_saisie)
-
-    vehicule_sel = None
-    for v in vehicules:
-        if v.id_vehicule == id_vehicule:
-            vehicule_sel = v
-            break
-
-    if vehicule_sel is None:
-        print("❌ Véhicule introuvable.")
-        input("Appuyez sur Entrée pour revenir au menu...")
+    if not _forfait_valide(forfait_saisie):
+        print("❌ Forfait invalide.")
+        _pause()
         return
 
-    client_sel = None
-    for c in clients:
-        if c.id_client == id_client:
-            client_sel = c
-            break
+    forfait = "+300" if forfait_saisie == "+300" else int(forfait_saisie)
 
-    if client_sel is None:
-        print("❌ Client introuvable.")
-        input("Appuyez sur Entrée pour revenir au menu...")
+    try:
+        cout_journalier, prix_km_supp = TarifsManager.obtenir_tarif(
+            vehicule_sel.cylindree,
+            forfait
+        )
+    except KeyError:
+        print("❌ Tarif introuvable.")
+        _pause()
         return
-
-    cout_journalier, prix_km_supp = TarifsManager.obtenir_tarif(vehicule_sel.cylindree, forfait)
 
     reservation = Reservation(
         id_reservation=generer_id_reservation(),
@@ -144,12 +179,12 @@ def demander_reservation() -> None:
     choix = input("Sauvegarder cette réservation ? (o/n) : ").strip().lower()
     if choix == "o":
         sauvegarder_reservation(reservation)
-        print("✓ Réservation sauvegardée dans reservations.json")
-        print("✓ Réservation enregistrée avec succès !")
+        print("✓ Réservation sauvegardée.")
     else:
         print("Réservation annulée.")
 
-    input("Appuyez sur Entrée pour revenir au menu...")
+    _pause()
+
 
 
 
