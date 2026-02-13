@@ -17,3 +17,26 @@ class Client:
 
     def __str__(self) -> str:
         return f"{self.id_client} - {self.prenom} {self.nom} ({self.mail})"
+    
+
+    def to_dict(self) -> dict:
+        return {
+            "id_client": self.id_client,
+            "nom": self.nom,
+            "prenom": self.prenom,
+            "mail": self.mail,
+            "telephone": self.telephone,
+            "adresse": self.adresse
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Client":
+        return cls(
+            id_client=data["id_client"],
+            nom=data["nom"],
+            prenom=data["prenom"],
+            mail=data["mail"],
+            telephone=data["telephone"],
+            adresse=data["adresse"]
+        )
+

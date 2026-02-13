@@ -21,3 +21,23 @@ class Vehicule:
             f"({self.cylindree} cyl., {self.kilometrage_actuel} km)"
         )
 
+    def to_dict(self) -> dict:
+        return {
+            "id_vehicule": self.id_vehicule,
+            "marque": self.marque,
+            "modele": self.modele,
+            "cylindree": self.cylindree,
+            "kilometrage_actuel": self.kilometrage_actuel,
+            "date_mise_en_circulation": self.date_mise_en_circulation
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Vehicule":
+        return cls(
+            id_vehicule=data["id_vehicule"],
+            marque=data["marque"],
+            modele=data["modele"],
+            cylindree=data["cylindree"],
+            kilometrage_actuel=data["kilometrage_actuel"],
+            date_mise_en_circulation=data["date_mise_en_circulation"]
+        )
