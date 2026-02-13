@@ -3,6 +3,7 @@ from ui import (
     demander_choix_menu,
     afficher_clients,
     afficher_vehicules,
+    demander_reservation,
 )
 from models import Reservation
 
@@ -17,6 +18,9 @@ def main() -> None:
 
         elif choix == "2":
             afficher_vehicules()
+
+        elif choix == "3":
+            demander_reservation()
 
         elif choix == "7":
             print("Au revoir !")
