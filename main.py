@@ -4,6 +4,7 @@ from ui import (
     afficher_clients,
     afficher_vehicules,
 )
+from models import Reservation
 
 
 def main() -> None:

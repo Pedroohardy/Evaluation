@@ -1,5 +1,6 @@
 import json
-from models import Client, Vehicule
+from models.client import Client
+from models.vehicule import Vehicule
 
 
 def charger_clients():
